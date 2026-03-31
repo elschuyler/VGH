@@ -21,10 +21,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle (use version 8.3, no wrapper needed)
+      - name: Setup Gradle (use version 8.4, no wrapper needed)
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.3'
+          gradle-version: '8.4'
 
       - name: Build APK
         run: gradle assembleDebug
