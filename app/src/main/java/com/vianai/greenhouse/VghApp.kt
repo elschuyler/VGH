@@ -1,27 +1,52 @@
 package com.vianai.greenhouse
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.vianai.greenhouse.ui.components.BottomToolbar
+import com.vianai.greenhouse.ui.components.BottomToolbarItem
 import com.vianai.greenhouse.ui.components.TopBar
 import com.vianai.greenhouse.ui.panes.PaneContainer
 
-enum class VghPane { BRAIN, SOURCE, RESEARCH }
-
 @Composable
 fun VghApp() {
-    var activePane by remember { mutableStateOf(VghPane.BRAIN) }
-    val paneManager = remember { PaneManager() }
-    Column(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
-        TopBar(activePane = activePane, onPaneSelected = { activePane = it })
-        PaneContainer(activePane = activePane, paneManager = paneManager, modifier = Modifier.weight(1f))
-        BottomToolbar(activePane = activePane, onPaneCycle = {
-            activePane = when (activePane) {
-                VghPane.BRAIN -> VghPane.SOURCE
-                VghPane.SOURCE -> VghPane.BRAIN
-                VghPane.RESEARCH -> VghPane.BRAIN
-            }
-        })
+    var activePane by remember { mutableStateOf(0) } // 0=Brain, 1=Source, 2=Research
+
+    Scaffold(
+        topBar = {
+            TopBar(
+                title = when (activePane) {
+                    0 -> "Brain"
+                    1 -> "Source"
+                    else -> "Research"
+                }
+            )
+        },
+        bottomBar = {
+            BottomToolbar(
+                items = listOf(
+                    BottomToolbarItem("brain", "Brain", Icons.Default.Android),
+                    BottomToolbarItem("source", "Source", Icons.Default.Android),
+                    BottomToolbarItem("research", "Research", Icons.Default.Android)
+                ),
+                onItemClick = { item ->
+                    activePane = when (item.id) {
+                        "brain" -> 0
+                        "source" -> 1
+                        else -> 2
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            PaneContainer(activePane = activePane)
+        }
     }
 }
