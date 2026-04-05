@@ -1,28 +1,54 @@
 package com.vianai.greenhouse.theme
-import android.app.Activity
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = SpaceBlue, secondary = SpaceBlue, tertiary = SpaceBlue,
-    background = VghCharcoal, surface = SurfaceDark,
-    onPrimary = TextPrimary, onBackground = TextPrimary, onSurface = TextPrimary
-)
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+
+// Design tokens from handoff
+val VghCharcoal = Color(0xFF151619)   // Primary background
+val SpaceBlack = Color(0xFF050505)    // Secondary background
+val SpaceBlue = Color(0xFF1E90FF)     // Accent
+val DarkRed = Color(0xFF8B0000)       // Destructive
+
+// Surface and text aliases for compatibility
+val SurfaceDark = VghCharcoal
+val TextPrimary = SpaceBlack
 
 @Composable
-fun VGHTheme(content: @Composable () -> Unit) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = VghCharcoal.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
-        }
+fun VghTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colorScheme = if (darkTheme) {
+        darkColorScheme(
+            primary = SpaceBlue,
+            secondary = SpaceBlue,
+            tertiary = SpaceBlue,
+            background = VghCharcoal,
+            surface = VghCharcoal,
+            onPrimary = SpaceBlack,
+            onSecondary = SpaceBlack,
+            onBackground = SpaceBlack,
+            onSurface = SpaceBlack
+        )
+    } else {
+        lightColorScheme(
+            primary = SpaceBlue,
+            secondary = SpaceBlue,
+            tertiary = SpaceBlue,
+            background = VghCharcoal,
+            surface = VghCharcoal,
+            onPrimary = SpaceBlack,
+            onSecondary = SpaceBlack,
+            onBackground = SpaceBlack,
+            onSurface = SpaceBlack
+        )
     }
-    MaterialTheme(colorScheme = DarkColorScheme, typography = VghTypography, content = content)
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography(),
+        content = content
+    )
 }
