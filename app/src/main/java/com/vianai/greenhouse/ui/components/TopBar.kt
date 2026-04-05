@@ -12,12 +12,12 @@ fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,
-    actions: @Composable (() -> Unit)? = null,
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     TopAppBar(
         title = { Text(text = title) },
         modifier = modifier,
-        navigationIcon = navigationIcon,
+        navigationIcon = navigationIcon?.let { { it() } },
         actions = actions ?: {},
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = VghCharcoal,
