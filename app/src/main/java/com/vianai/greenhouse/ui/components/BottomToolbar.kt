@@ -1,26 +1,44 @@
 package com.vianai.greenhouse.ui.components
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.vianai.greenhouse.theme.VghCharcoal
-import com.vianai.greenhouse.theme.SpaceBlue
 
 @Composable
-fun BottomToolbar(activePane: com.vianai.greenhouse.VghPane, onPaneCycle: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxWidth().height(64.dp).background(VghCharcoal).pointerInput(Unit) { detectHorizontalDragGestures(onDragEnd = { onPaneCycle() }) }) {
-        Row(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-            ToolbarSlot()
-            ToolbarSlot()
-            ToolbarSlot()
+fun BottomToolbar(
+    modifier: Modifier = Modifier,
+    items: List<BottomToolbarItem>,
+    onItemClick: (BottomToolbarItem) -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items.forEach { item ->
+            IconButton(
+                onClick = { onItemClick(item) }
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = item.label,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }
 
-@Composable
-private fun ToolbarSlot() {
-    Box(modifier = Modifier.size(48.dp).padding(4.dp).background(SpaceBlue, shape = androidx.compose.foundation.shape.CircleShape))
-}
+data class BottomToolbarItem(
+    val id: String,
+    val label: String,
+    val icon: ImageVector
+)
